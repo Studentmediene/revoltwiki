@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework import routers
+from graphene.contrib.django.views import GraphQLView
+
 from wiki import views
+from .schema import schema
 
 rest_router = routers.DefaultRouter()
 rest_router.register(r'users', views.UserViewSet)
@@ -28,5 +33,7 @@ rest_router.register(r'categories', views.CategoryViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(rest_router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^graphql', csrf_exempt(GraphQLView.as_view(schema=schema))),
+    url(r'^graphiql', include('django_graphiql.urls')),
 ]

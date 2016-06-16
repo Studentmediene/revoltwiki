@@ -22,17 +22,20 @@ class Content(models.Model):
     content = models.TextField()
     parent_article = models.ForeignKey('Article')
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User)
+    created_by = models.ForeignKey(User,
+                                   related_name='contributions',
+                                   related_query_name='contribution')
 
 
 class Article(models.Model):
     title = models.CharField(max_length=128)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='articles',
+                                 related_query_name='article')
     current_content = models.ForeignKey(Content)
     deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
-    created_by = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
+    created_by = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), related_name='+')
 
     def authors(self):
         return [content.created_by for content in Content.objects.filter(article=self)]
