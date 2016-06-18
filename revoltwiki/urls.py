@@ -26,7 +26,7 @@ from .schema import schema
 rest_router = routers.DefaultRouter()
 rest_router.register(r'users', views.UserViewSet)
 rest_router.register(r'articles', views.ArticleViewSet)
-rest_router.register(r'content', views.ContentViewSet)
+rest_router.register(r'article_versions', views.ArticleVersionViewSet)
 rest_router.register(r'categories', views.CategoryViewSet)
 
 
