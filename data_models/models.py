@@ -108,15 +108,10 @@ class ArticleVersion(models.Model):
         return str(self.__unicode__())
 
 
-def uncategorized():
-    category, created = Category.objects.get_or_create(title=_('Uncategorized'))
-    return category.pk
-
-
 class Article(models.Model):
     title = models.CharField(max_length=128, unique=True)
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, related_name='articles',
-                                 related_query_name='article', default=uncategorized())
+                                 related_query_name='article', default=None)
 
     def allowed_versions(self):
         return {'parent_article': self.pk}
